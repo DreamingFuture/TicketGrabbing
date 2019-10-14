@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>预约成功</title>
+    <link rel="stylesheet" href="{% static 'css/success.css' %}">
+</head>
+<body>
+    <img src="{% static 'images/logo2.svg' %}" alt="" class="logo">
+    <img src="{% static 'images/visit.svg' %}" alt="" class="success">
+    <p class="text1" >预约成功</p>
+    <div class="text2">
+        <div style="margin-left: 9rem">
+        </div>
+        <p class="text3">请导出门票，准时参观哦！</p>
+    </div>
+
+
+        <form action="{% url 'export_ticket' %}" method="post">
+            <input type="hidden" name="ticket_type" value="V">
+            <input type="hidden" name="stu_id" value="{{ stu_id }}">
+            <input type="hidden" name="times" value="{{ times }}">
+            {% csrf_token %}
+            <button type="submit" id="button" class="button">导出门票</button>
+        </form>
+
+<script>
+    var secs = 3;
+    document.getElementById('button').setAttribute('class', 'button-dis');
+    document.getElementById('button').disabled=true;
+    for(var i=0;i<=secs;i++) {
+        window.setTimeout("update(" + i + ")", i * 1000);
+    }
+
+    function update(num) {
+        if(num == secs) {
+            document.getElementById('button').textContent ="导出门票";
+            document.getElementById('button').disabled=false;
+            document.getElementById('button').setAttribute('class', 'button');
+        }
+        else {
+            var printnr = secs-num;
+            document.getElementById('button').textContent = "导出门票 (" + printnr +")";
+        }
+    }
+</script>
+
+</body>
+</html>

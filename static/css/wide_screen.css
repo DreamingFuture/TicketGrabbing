@@ -1,0 +1,99 @@
+.alter_message{
+        display: none;
+    }
+@media screen and (min-width: 1100px) {
+    .container{
+        display: none;
+    }
+    .contain{
+        display: none;
+    }
+    .alter_message{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-image: url("/static/images/cloud.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        display: block;
+        width: 100%;
+        text-align-last: center;
+    }
+    .board{
+        width: 280px;
+        height: 350px;
+        margin:5% auto 5% auto;
+        border-radius: 10% 10% 10% 10%;
+        background-color: #ffffff;
+        border: 1px #F8F8F8 solid;
+        box-shadow: 0 10px 10px #303030;
+    }
+    #adjust{
+        display: block;
+        margin:0 auto;
+        content: url("/static/images/changyaojie.xyz.png");
+        width: 75%;
+    }
+    #message{
+        display: block;
+        margin:20% auto 20px auto;
+        font-size: 25px;
+        text-align: center;
+    }
+    #footer_logo{
+        display: block;
+        margin: 0 auto;
+        width: 257px;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 1100px){
+    .container{
+        display: none;
+    }
+    .contain{
+        display: none;
+    }
+    .alter_message{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-image: url("/static/images/cloud_ipad.jpg");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        display: block;
+        width: 100%;
+        text-align-last: center;
+    }
+
+    .board{
+        width: 320px;
+        height: 400px;
+        margin:20% auto 20% auto;
+        border-radius: 10% 10% 10% 10%;
+        background-color: #ffffff;
+        border: 1px #F8F8F8 solid;
+        box-shadow: 0 10px 10px #303030;
+    }
+    #adjust{
+        display: block;
+        margin:0 auto;
+        content: url("/static/images/changyaojie.xyz.png");
+        width: 75%;
+    }
+    #message{
+        display: block;
+        margin:20% auto 20px auto;
+        font-size: 25px;
+        text-align: center;
+    }
+    #footer_logo{
+        display: block;
+        margin: 0 auto;
+        width: 300px;
+    }
+}

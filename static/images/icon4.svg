@@ -1,0 +1,17 @@
+<svg id="组_27" data-name="组 27" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fbfbfb;
+      }
+
+      .cls-2 {
+        fill: #666;
+      }
+    </style>
+  </defs>
+  <path id="路径_262" data-name="路径 262" class="cls-1" d="M6,0H34a6,6,0,0,1,6,6V34a6,6,0,0,1-6,6H6a6,6,0,0,1-6-6V6A6,6,0,0,1,6,0Z"/>
+  <g id="icon" transform="translate(12 10.13)">
+    <path id="路径_261" data-name="路径 261" class="cls-2" d="M-297.319-299h-1.643v8.29h6.622v-1.643h-4.979Zm.319-4a10,10,0,0,0-10,10,10,10,0,0,0,10,10,10,10,0,0,0,10-10,10,10,0,0,0-10-10Zm0,18a8.023,8.023,0,0,1-8-8,8.024,8.024,0,0,1,8-8,8.024,8.024,0,0,1,8,8,8.023,8.023,0,0,1-8,8Zm0,0" transform="translate(307 303)"/>
+  </g>
+</svg>

@@ -1,0 +1,190 @@
+{% extends 'xadmin/base_site.html' %}
+{% load i18n xadmin_tags %}
+
+{% block content %}
+    {% block content-nav %}
+    {% endblock %}
+    <style>
+        #available_visit td{
+            text-align: center;
+            width: 380px;
+            height: 50px;
+            color: #666666;
+            font-size: 14px;
+        }
+        .container_1{
+            display: flex;
+            overflow: hidden;
+            flex-wrap: wrap;
+            width:100%;
+            background-color: #F8F8F8;
+            background-size: cover;
+            border-radius: 4px;
+            border: 2px solid #F8F8F8;
+        }
+
+        .column_div{
+            width:50%;
+            flex-shrink: 0;
+        }
+
+        .tea_board{
+            width:100%;
+            margin-top: 40px;
+        }
+
+        td{
+            text-align: center;
+            width: 250px;
+            height: 50px;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        table{
+            margin: 0 auto;
+            box-shadow: 0 3px 6px #DFDFDF;
+        }
+
+        .table_caption{
+            background-color: #297AFF;
+            text-align: center;
+            font-size: 20px;
+            line-height: 50px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .table_head{
+            background-color: #D4E4FF;
+            font-size: 14px;
+            line-height: 50px;
+        }
+
+        .table_head td{
+            color: #297AFF;
+        }
+
+        tr{
+            background-color: #FFFFFF;
+        }
+
+        .grey_row{
+            background-color: #F7F7F7;
+        }
+
+        .container_inner{
+            margin-top:50px;
+            width:100%;
+            flex-shrink: 0;
+         }
+
+        .button_table{
+            display: flex;
+            width:100%;
+            height:100px;
+        }
+
+        .box{
+            width:100%;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .my_function{
+            margin-top: 25px;
+        }
+
+        .my_button{
+            border: none;
+            outline: none;
+            margin: 0 auto;
+            width: 300px;
+            height: 50px;
+            display: block;
+            font-size: 18px;
+            background-color: #1875F0;
+            color: #FFFFFF;
+        }
+
+        .my_input{
+            text-align:center;
+            outline: 0;
+            border: 0;
+            background-color: white;
+        }
+
+        .my_input:focus{
+            border-bottom: 1px solid #555555;
+        }
+
+    </style>
+    <div class="container_1">
+        <form action="" id="ticket_control" method="post">
+
+        <div class="tea_board">
+            <table>
+                <tbody>
+                <tr>
+                    <td class="table_caption" colspan="5">余票重置</td>
+                </tr>
+                <tr class="table_head">
+                    <td>名称</td>
+                    <td>时间</td>
+                    <td>填票数</td>
+                    <td>宣讲人/介绍人</td>
+                    <td>修改</td>
+                </tr>
+                <tr>
+                    <td>宣讲会</td>
+                    <td>12:30</td>
+                    <td><input value="300" class="my_input" type="number" name="preach1" id="1" disabled></td>
+                    <td><input value="学长学姐" class="my_input" type="text" name="preach_people1" id="3" disabled></td>
+                    <td>
+                        <a onclick="document.getElementById('1').disabled=false;
+                        document.getElementById('3').disabled=false;
+                        alert('现在可以修改了')">修改</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>宣讲会</td>
+                    <td>12:30</td>
+                    <td><input value="300" class="my_input" type="number" name="preach2" id="2" disabled></td>
+                    <td><input value="学长学姐" class="my_input" type="text" name="preach_people2" id="4" disabled></td>
+                    <td>
+                        <a onclick="document.getElementById('2').disabled=false;
+                        document.getElementById('4').disabled=false;
+                        alert('现在可以修改了')">修改</a>
+                    </td>
+                </tr>
+                {% for time_code,time in visit_times_dict.items %}
+                    <tr>
+                        <td>预约参观</td>
+                        <td>{{ time }}</td>
+                        <td><input value="50" class="my_input" type="number" name="visit{{ time_code }}" id="{{ time_code }}" disabled></td>
+                        <td><input value="云顶的学长学姐" class="my_input" type="text" disabled></td>
+                        <td>
+                        <a onclick="document.getElementById('{{ time_code }}').disabled=false;
+                        alert('现在可以修改了')">修改</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                    </tbody>
+                </table>
+        </div>
+
+        <div class="container_inner">
+            <div class="button_table">
+                <div class="box">
+                        <button class="my_button" onclick="$('input').removeAttr('disabled');">一键添加</button>
+                </div>
+            </div>
+        </div>
+
+            {% csrf_token %}
+
+        </form>
+    </div>
+
+{% endblock %}

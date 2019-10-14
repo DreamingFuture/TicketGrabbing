@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信息填写</title>
+    <meta name="viewport" content="maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="{% static 'css/ticketSnatching_zsj.css' %}">
+    <link rel="stylesheet" href="{% static 'css/alert.css' %}">
+
+    <style>
+        .name{
+            width: 100%;
+            padding-right:100px;
+            border-radius: 0 18px 18px 0;
+            padding-left: 25px;
+        }
+        .box1{
+            background: url('{% static 'images/icon1.svg' %}') no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+
+        .box2{
+            background: url('{% static 'images/icon2.svg' %}') no-repeat scroll right center transparent;
+            background-size: 100px;
+            padding-right:100px;
+        }
+
+        .box3{
+            background: url('{% static 'images/icon3.svg' %}') no-repeat scroll right center transparent;
+            background-size: 100px;
+            padding-right:100px;
+        }
+
+        .box4{
+            background: url('{% static 'images/icon4.svg' %}') no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+
+        .box1:focus{
+            background: url("{% static 'images/icon1A.svg' %}") no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+        .box2:focus{
+            background: url("{% static 'images/icon2A.svg' %}") no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+        .box3:focus{
+            background: url("{% static 'images/icon3A.svg' %}") no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+        .box4:focus{
+            background: url("{% static 'images/icon4A.svg' %}") no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="contain">
+    <div class="wrapper">
+        <img src="{% static 'images/logo.png' %}" alt="" style="width: 668px;height:426px;position: absolute;right:2px ;top: 30px">
+        <div class="content">
+            <span>2019/<br>宣讲会抢票</span>
+        </div>
+    </div>
+    <form action="{% url 'get_preach_ticket' %}" id="get_ticket" method="post">
+        <div class="banner">
+            <div class="length_line">
+                <div style="display: flex" class="part1">
+                    <input type="text" name="name" id="name" class="name box1"  placeholder="请输入名字"><br>
+                </div>
+
+                <div style="display: flex" class="part2">
+                    <input type="number" name="stu_id" id="stu_id" class="name box2" placeholder="请输入学号"><br>
+                </div>
+
+                <div style="display: flex" class="part3">
+                    <input type="text" name="major" id="major" class="name box3" placeholder="请输入专业"><br>
+                </div>
+
+                <div style="display: flex" class="part4">
+                    <select  style="height: 102px;" id="times" name="times" class="name box4">
+                        <option selected="selected" disabled="disabled"  style='display: none;' value='0'>请选择时间</option>
+                        {% for id,time in times_dict.items %}
+                            <option value="{{ id }}">{{ time }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="blank"></div>
+            </div>
+            <input type="hidden" name="token" id="token">
+            {% csrf_token %}
+        </div>
+    </form>
+
+    <button class="btn alert-api-button alert-btn1" onclick="">开始抢票</button>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script type="text/javascript" src="{% static 'js/alert.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/my_alert.js' %}"></script>
+
+
+<script>
+    $(document).ready(function(){
+        $("button").click(function(){
+            let name=document.getElementById('name').value;
+            let stu_id=document.getElementById('stu_id').value;
+            let major=document.getElementById('major').value;
+            let objTimes=document.getElementById("times");
+            let times=objTimes.options[objTimes.selectedIndex].value;
+            let token = $.cookie('csrftoken'); //获取当前csrftoken值
+            if(name=='' ||stu_id=='' ||major=='' ||times=='0'){
+                my_alert1("小可爱要把信息输全呀!!")
+            }
+            else {
+                $.post("{% url 'data_verify' %}",
+                    {
+                        ticket_type:"G",
+                        stu_id:stu_id,
+                        name:name,
+                        major:major,
+                        times:times,
+                        csrfmiddlewaretoken: token
+                    },
+                    function(data,status){
+                        if(data.code == 0){
+                            {#alert(data.msg);#}
+                            my_alert1(data.msg);
+                        }
+                        if(data.code == 1){
+                            document.getElementById('token').value = data.token_code;
+                            document.getElementById("get_ticket").submit();
+                        }
+                        if(data.code == 2){
+                            {#my_alert2(data.msg);#}
+                            var M={};
+                            if(M.dialog){
+                                return M.dialog.show();
+                            }
+                            M.dialog = jqueryAlert({
+                                'height': 250,
+                                'content' : data.msg,
+                                'modal': true,
+                                'buttons' :{
+                                    '确定' : function(){
+                                        M.dialog.close();
+                                        export_ticket(times, stu_id, token)
+                                    }
+                                }
+                            })
+                        }
+                    });
+            }
+        });
+    });
+</script>
+
+<script>
+    function export_ticket(times, stu_id, token) {
+        //创建form表单
+        var temp_form = document.createElement("form");
+        temp_form.action = "{% url 'export_ticket' %}";
+        //如需打开新窗口，form的target属性要设置为'_blank'
+        temp_form.target = "_self";
+        temp_form.method = "post";
+        temp_form.style.display = "none";
+        //添加参数
+        params = {
+            'ticket_type':'G',
+            'times':times,
+            'stu_id':stu_id,
+            'csrfmiddlewaretoken': token
+        };
+        for (var item in params) {
+            var opt = document.createElement("input");
+            opt.name = item;
+            opt.value = params[item];
+            temp_form.appendChild(opt);
+        }
+        document.body.appendChild(temp_form);
+        temp_form.submit();
+    }
+</script>
+
+<script>
+    //select 标签变色效果
+    let unSelected = "#666666";
+    let selected = "#000000";
+    $(function () {
+        $("select").css("color", unSelected);
+        $("option").css("color", selected);
+        $("select").change(function () {
+            let selItem = $(this).val();
+            if (selItem == $(this).find('option:first').val()) {
+                $(this).css("color", unSelected);
+            } else {
+                $(this).css("color", selected);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

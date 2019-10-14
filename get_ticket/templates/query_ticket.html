@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询</title>
+    <meta name="viewport" content="maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="{% static 'css/ticketSnatching_zsj.css' %}">
+    <link rel="stylesheet" href="{% static 'css/iosSelect.css' %}">
+
+    <style>
+        .name{
+            width: 100%;
+            padding-right:100px;
+            border-radius: 0 18px 18px 0;
+        }
+        .box1{
+            background: url('{% static 'images/icon1.svg' %}') no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+
+        .box2{
+            background: url('{% static 'images/icon2.svg' %}') no-repeat scroll right center transparent;
+            background-size: 100px;
+            padding-right:100px;
+        }
+
+        .box1:focus{
+            background: url("{% static 'images/icon1A.svg' %}") no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+        .box2:focus{
+            background: url("{% static 'images/icon2A.svg' %}") no-repeat scroll right center transparent;
+            background-size: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="contain">
+    <div class="wrapper">
+        <img src="{% static 'images/logo.png' %}" alt="" style="width: 668px;height:426px;position: absolute;right:2px ;top: 30px">
+        <div class="content">
+            <span>2019/<br>门票查询</span>
+        </div>
+    </div>
+    <form action="{% url 'export_ticket' %}" id="get_ticket" method="post">
+        <div class="banner">
+            <div class="length_line">
+                <div style="display: flex" class="part1">
+                    <input type="text" name="name" id="name" class="name box1"  placeholder="请输入名字"><br>
+                </div>
+
+                <div style="display: flex" class="part2">
+                    <input type="number" name="stu_id" id="stu_id" class="name box2" placeholder="请输入学号"><br>
+                </div>
+
+                <input type="hidden" id="ticket_type" name="ticket_type">
+                <input type="hidden" id="times" name="times">
+
+                <div class="blank"></div>
+            </div>
+            <input type="hidden" name="token" id="token">
+            {% csrf_token %}
+        </div>
+    </form>
+
+    <button class="btn alert-api-button alert-btn1" onclick="" id="query">查询</button>
+
+</div>
+
+
+<script type="text/javascript" src="{% static 'js/iosSelect.js' %}"></script>
+
+
+<script type="text/javascript">
+    var type_data = [
+        {'id': 'G', 'value': '宣讲会', "parentId":"0"},
+        {'id': 'V', 'value': '预约参观', "parentId":"0"},
+    ];
+    var times_data = [
+        {'id': '1', 'value': '12:30 PM', "parentId":"G"},
+        {'id': '2', 'value': '19:00 PM', "parentId":"G"},
+        {'id': '8', 'value': '8:30-10:00', "parentId":"V"},
+        {'id': '10', 'value': '10:00-12:00', "parentId":"V"},
+        {'id': '12', 'value': '12:30-14:00', "parentId":"V"},
+        {'id': '14', 'value': '14:00-16:00', "parentId":"V"},
+        {'id': '16', 'value': '16:00-18:00', "parentId":"V"},
+        {'id': '18', 'value': '18:00-19:00', "parentId":"V"},
+        {'id': '19', 'value': '19:00-20:00', "parentId":"V"},
+        {'id': '20', 'value': '20:00-21:00', "parentId":"V"},
+        {'id': '21', 'value': '21:00-22:00', "parentId":"V"},
+    ];
+
+    var showGeneralDom = document.querySelector('#query');
+    var ticket_type = document.querySelector('#ticket_type');
+    var times = document.querySelector('#times');
+    showGeneralDom.addEventListener('click', function () {
+        var sanguoSelect = new IosSelect(2,
+            [type_data, times_data],
+            {
+                title: '时间选择',
+                itemHeight: 80,
+                headerHeight: 85,
+                relation: [1, 1],
+                callback: function (selectOneObj, selectTwoObj) {
+                    let name=document.getElementById('name').value;
+                    let stu_id=document.getElementById('stu_id').value;
+                    if(name=='' ||stu_id==''){
+                        document.getElementById('name').placeholder='小可爱没输姓名哦！';
+                        document.getElementById('stu_id').placeholder='小可爱没填学号呀！';
+                        return
+                    }
+                    ticket_type.value = selectOneObj.id;
+                    times.value = selectTwoObj.id;
+                    let export_form = document.getElementById('get_ticket');
+                    export_form.submit();
+                }
+        });
+    });
+</script>
+
+
+</body>
+</html>
